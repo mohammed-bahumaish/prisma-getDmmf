@@ -13,6 +13,6 @@ export default async function handler(
     res.status(200).send(dmmf.datamodel);
   } catch (error) {
     console.log({ error });
-    res.status(500).send(error);
+    res.status(500).json(JSON.stringify({ error }));
   }
 }
