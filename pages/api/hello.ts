@@ -1,13 +1,18 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from "next";
+import { getDMMF } from "@prisma/internals";
 
-type Data = {
-  name: string
-}
-
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<any>
 ) {
-  res.status(200).json({ name: 'John Doe' })
+  try {
+    const dmmf = await getDMMF({
+      datamodel: req.body.schema,
+    });
+    res.status(200).send(dmmf.datamodel);
+  } catch (error) {
+    console.log({ error });
+    res.status(500).send(error);
+  }
 }
